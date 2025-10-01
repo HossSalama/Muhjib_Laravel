@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-//         Schema::table('template_clients', function (Blueprint $table) {
-//     $table->unsignedBigInteger('client_id')->nullable(); // للعلاقة بالعميل الحقيقي
-//     $table->foreign('client_id')->references('id')->on('clients')->onDelete('set null');
-// });
+        Schema::table('template_clients', function (Blueprint $table) {
+    $table->unsignedBigInteger('client_id')->nullable(); // للعلاقة بالعميل الحقيقي
+    $table->foreign('client_id')->references('id')->on('clients')->onDelete('set null');
+});
     }
 
     /**
