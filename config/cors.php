@@ -19,7 +19,8 @@ return [
 
 'allowed_methods' => ['*'],
 
-'allowed_origins' => ['*'],
+'allowed_origins' => ['https://surfaces-care-qam8.vercel.app'],
+'supports_credentials' => true,
 
 'allowed_headers' => ['*'],
 
@@ -28,6 +29,5 @@ return [
 
 'max_age' => 0,
 
-'supports_credentials' => true,
 
 ];
