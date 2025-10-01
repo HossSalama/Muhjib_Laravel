@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle:api',
             \App\Http\Middleware\SetApiLocale::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-
+            \Illuminate\Http\Middleware\HandleCors::class
         ]);
 
         $middleware->alias([
