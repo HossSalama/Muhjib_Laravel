@@ -2,9 +2,9 @@
 
 return [
 
-    'default' => env('FILESYSTEM_DISK', 'public'),
+    'default' => env('FILESYSTEM_DISK', 'local'),
 
-    'cloud' => env('FILESYSTEM_CLOUD', 'cloudinary'), // ✅ ضفنا السطر ده
+    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
     'disks' => [
 
