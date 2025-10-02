@@ -7,27 +7,30 @@ return [
     | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
     |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
+    | This file controls how your application responds to cross-origin requests.
+    | You can adjust these settings as necessary for your application.
     |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    | For more information: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
 
-'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-'allowed_methods' => ['*'],
+    'allowed_methods' => ['*'],
 
-'allowed_origins' => ['https://surfaces-care-qam8.vercel.app'],
-'supports_credentials' => true,
+    'allowed_origins' => [
+        'http://localhost:5173',   // للـ development
+        'https://surfaces-care-qam8.vercel.app', // للـ production (Vercel)
+    ],
 
-'allowed_headers' => ['*'],
+    'allowed_origins_patterns' => [],
 
+    'allowed_headers' => ['*'],
 
-'exposed_headers' => [],
+    'exposed_headers' => [],
 
-'max_age' => 0,
+    'max_age' => 0,
 
+    'supports_credentials' => true,
 
 ];

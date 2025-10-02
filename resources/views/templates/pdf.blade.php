@@ -76,7 +76,7 @@
                     @foreach($chunk as $tp)
                         <div class="product">
                             @if($tp->image)
-                                <img src="{{ image_url($tp->main_image) }}" alt="{{ $tp->name }}">
+                                <img src="{{ image_url($tp->image) }}" alt="{{ $tp->name }}">
                             @else
                                 <img src="{{ asset('images/placeholder.jpg') }}" alt="No Image">
                             @endif
