@@ -41,10 +41,12 @@ use App\Http\Controllers\AnalyticsController;
 Route::get('/analytics', [AnalyticsController::class, 'index']);
 Route::get('/activities', [ActivityController::class, 'index']);
 
+
     Route::get('brands/', [BrandController::class, 'index']);
     Route::get('main-categories/', [MainCategoriesController::class, 'index']);
     Route::get('sub-categories/', [SubCategoriesController::class, 'index']);
     Route::get('products/', [ProductController::class, 'index']);
+    Route::post('products/create', [ProductController::class, 'store']);
     Route::get('products/show/{product}', [ProductController::class, 'show']);
     Route::get('brands/{brand}', [BrandController::class, 'show']);
     Route::get('main-categories/show/{mainCategory}', [MainCategoriesController::class, 'show']);
@@ -87,7 +89,7 @@ Route::middleware(['auth:api', 'is_admin'])->group(function (){
     Route::get('/users', [UserController::class, 'index']);
 // Products Routes
 Route::group(['prefix'=>'products'],function(){
-    Route::post('/create', [ProductController::class, 'store']);
+    // Route::post('/create', [ProductController::class, 'store']);
     // Route::post('/update/{product}', [ProductController::class, 'update']);
     // Route::post('/update/{product}', [ProductController::class, 'update']);
 // Search and Filter Endpoints
