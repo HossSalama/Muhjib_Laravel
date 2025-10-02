@@ -268,7 +268,7 @@ return [
          * @var bool
          */
         'enable_remote' => true,
-
+        'isRemoteEnabled' => true,
         /**
          * List of allowed remote hosts
          *
