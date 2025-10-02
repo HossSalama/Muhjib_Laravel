@@ -102,6 +102,7 @@ public function generateCatalog(Request $request)
         return response()->json(['message' => 'No client associated with this basket.'], 400);
     }
 
+    // ✅ QR Codes
     $qrDir = storage_path('app/public/qrcodes');
     if (!file_exists($qrDir)) {
         mkdir($qrDir, 0755, true);
@@ -117,6 +118,7 @@ public function generateCatalog(Request $request)
         }
     }
 
+    // ✅ Build Products
     $templateProducts = $basket->basketProducts->map(function ($item) {
         $product = $item->product;
         $qrFileName = 'qrcodes/qr_' . $product->id . '.svg';
@@ -134,7 +136,6 @@ public function generateCatalog(Request $request)
         ];
     });
 
-    // ✅ بدل SubCategory => Brand
     $groupedProducts = $templateProducts->groupBy(function ($item) {
         return optional($item->product->brand)->id;
     });
@@ -148,7 +149,8 @@ public function generateCatalog(Request $request)
 
     $includeClientInfo = $request->boolean('include_client_info', true);
 
-    $pdf = Pdf::loadView('templates.pdf', [
+    // ✅ Generate PDF
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('templates.pdf', [
         'template' => $template,
         'user' => $user,
         'client' => $client,
@@ -157,16 +159,39 @@ public function generateCatalog(Request $request)
     ])->setPaper('A4', 'portrait');
 
     $filename = 'catalog_' . time() . '.pdf';
+
+    // ✅ Try Cloudinary first
+    try {
+        $uploadedFileUrl = null;
+
+        if (Storage::disk('cloudinary')) {
+            $uploadedFileUrl = Storage::disk('cloudinary')->put("catalogs/{$filename}", $pdf->output());
+        }
+
+        if ($uploadedFileUrl) {
+            $catalog->update(['pdf_path' => $uploadedFileUrl]);
+
+            return response()->json([
+                'message' => 'Catalog PDF Generated Successfully (Cloudinary)',
+                'file_url' => $uploadedFileUrl,
+            ]);
+        }
+    } catch (\Exception $e) {
+        // لو Cloudinary مش شغال نرجع على local storage
+    }
+
+    // ✅ Save Local (fallback)
     $filePath = 'catalogs/' . $filename;
     Storage::disk('public')->put($filePath, $pdf->output());
 
     $catalog->update(['pdf_path' => $filePath]);
 
     return response()->json([
-        'message' => 'Catalog PDF Generated Successfully',
+        'message' => 'Catalog PDF Generated Successfully (Local)',
         'file_url' => Storage::url($filePath),
     ]);
 }
+
 
 public function convertToCatalog(Request $request, Basket $basket)
 {
