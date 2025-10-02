@@ -102,7 +102,7 @@ public function generateCatalog(Request $request)
         return response()->json(['message' => 'No client associated with this basket.'], 400);
     }
 
-    // ✅ QR Codes
+    // ✅ Generate QR Codes locally
     $qrDir = storage_path('app/public/qrcodes');
     if (!file_exists($qrDir)) {
         mkdir($qrDir, 0755, true);
@@ -140,6 +140,7 @@ public function generateCatalog(Request $request)
         return optional($item->product->brand)->id;
     });
 
+    // ✅ Create Catalog record
     $catalog = Catalog::create([
         'name' => 'Generated Catalog from Basket #' . $basket->id,
         'template_id' => $template->id,
@@ -160,27 +161,7 @@ public function generateCatalog(Request $request)
 
     $filename = 'catalog_' . time() . '.pdf';
 
-    // ✅ Try Cloudinary first
-    try {
-        $uploadedFileUrl = null;
-
-        if (Storage::disk('cloudinary')) {
-            $uploadedFileUrl = Storage::disk('cloudinary')->put("catalogs/{$filename}", $pdf->output());
-        }
-
-        if ($uploadedFileUrl) {
-            $catalog->update(['pdf_path' => $uploadedFileUrl]);
-
-            return response()->json([
-                'message' => 'Catalog PDF Generated Successfully (Cloudinary)',
-                'file_url' => $uploadedFileUrl,
-            ]);
-        }
-    } catch (\Exception $e) {
-        // لو Cloudinary مش شغال نرجع على local storage
-    }
-
-    // ✅ Save Local (fallback)
+    // ✅ Save Local Only
     $filePath = 'catalogs/' . $filename;
     Storage::disk('public')->put($filePath, $pdf->output());
 
@@ -191,6 +172,7 @@ public function generateCatalog(Request $request)
         'file_url' => Storage::url($filePath),
     ]);
 }
+
 
 
 public function convertToCatalog(Request $request, Basket $basket)
