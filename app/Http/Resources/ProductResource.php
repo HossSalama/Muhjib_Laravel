@@ -29,10 +29,10 @@ class ProductResource extends JsonResource
 
             'brand_id'        => $this->brand_id,
             'sub_category_id' => $this->sub_category_id,
-            'main_image'      => file_url($this->main_image),
-            'pdf_hs'          => file_url($this->pdf_hs),
-            'pdf_msds'        => file_url($this->pdf_msds),
-            'pdf_technical'   => file_url($this->pdf_technical),
+            'main_image'      => image_url($this->main_image),
+            'pdf_hs'          => image_url($this->pdf_hs),
+            'pdf_msds'        => image_url($this->pdf_msds),
+            'pdf_technical'   => image_url($this->pdf_technical),
 
             'hs_code'         => $this->hs_code,
             'sku'             => $this->sku,

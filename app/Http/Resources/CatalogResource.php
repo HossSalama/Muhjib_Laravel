@@ -15,7 +15,7 @@ class CatalogResource extends JsonResource
             'template_id' => $this->template_id,
 
             // ✅ تحويل pdf_path لـ رابط كامل باستخدام الهيلبر
-            'pdf_url'     => $this->pdf_path ? file_url($this->pdf_path) : null,
+            'pdf_url'     => $this->pdf_path ? image_url($this->pdf_path) : null,
 
             // ✅ تحميل الريليشن لو موجود
             'basket'      => new BasketResource($this->whenLoaded('basket')),

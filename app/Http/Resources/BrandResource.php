@@ -20,7 +20,7 @@ class BrandResource extends JsonResource
             'full_description_ar' => $this->full_description_ar,
             'background_image_url' => image_url($this->background_image_url),
             'color_code' => $this->color_code,
-            'catalog_pdf_url' => file_url($this->catalog_pdf_url),
+            'catalog_pdf_url' => image_url($this->catalog_pdf_url),
             'main_categories' => $this->whenLoaded('mainCategories'),
             'created_at' => $this->created_at,
             'status' => $this->status,
