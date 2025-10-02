@@ -37,12 +37,6 @@ use App\Http\Controllers\ProductImportController;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AnalyticsController;
-use Illuminate\Support\Facades\Artisan;
-
-Route::get('/fix-storage-link', function () {
-    Artisan::call('storage:link');
-    return '✅ storage link created successfully.';
-});
 
 Route::get('/analytics', [AnalyticsController::class, 'index']);
 Route::get('/activities', [ActivityController::class, 'index']);
