@@ -19,12 +19,41 @@ class SubCategoriesController extends Controller
         return response()->json(['message' => 'Sub Categories Retrieved Successfully', 'data'=>$data],200);
     }
 
-    public function store(StoreSubCategoriesRequest $request)
-    {
-        $subcategory = SubCategories::create($request->validated());
-        $data=new SubCategoryResource($subcategory);
-        return response()->json(['message'=>'Sub Category Created Successfully', 'data'=>$data],201);
+public function store(Request $request)
+{
+    $request->validate([
+        'subcategories' => 'required|array|min:1',
+        'subcategories.*.main_category_id' => 'nullable|exists:main_categories,id',
+        'subcategories.*.name_en' => 'required|string|max:255',
+        'subcategories.*.name_ar' => 'nullable|string|max:255',
+        'subcategories.*.cover_image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
+        'subcategories.*.background_image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:4096',
+    ]);
+
+    $created = [];
+
+    foreach ($request->subcategories as $index => $item) {
+        $data = $item;
+
+        // صور: cover_image و background_image
+        if ($request->hasFile("subcategories.$index.cover_image")) {
+            $data['cover_image'] = $request->file("subcategories.$index.cover_image")->store('subcategories/covers', 'public');
+        }
+
+        if ($request->hasFile("subcategories.$index.background_image")) {
+            $data['background_image'] = $request->file("subcategories.$index.background_image")->store('subcategories/backgrounds', 'public');
+        }
+
+        $subcategory = SubCategories::create($data);
+        $created[] = new SubCategoryResource($subcategory);
     }
+
+    return response()->json([
+        'message' => 'Sub Categories Created Successfully',
+        'data' => $created
+    ], 201);
+}
+
 
     public function show($id)
     {
