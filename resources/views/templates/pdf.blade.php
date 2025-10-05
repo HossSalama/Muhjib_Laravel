@@ -76,7 +76,7 @@
                     @foreach($chunk as $tp)
                         <div class="product">
                             @if($tp->image)
-                                <img src="{{ pdf_image_path($tp->image) }}" alt="{{ $tp->name }}">
+                                <img src="{{ image_url($tp->image) }}" alt="{{ $tp->name }}">
                             @else
                                 <img src="{{ public_path('images/placeholder.jpg') }}" alt="No Image">
                             @endif

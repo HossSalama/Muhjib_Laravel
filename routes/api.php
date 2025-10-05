@@ -196,7 +196,7 @@ Route::post('/price-change-requests/{id}/reject', [QuoteActionController::class,
 // Brand routes
 Route::group(['prefix' => 'brands'], function () {
     Route::post('/create', [BrandController::class, 'store']);
-    Route::put('update/{brand}', [BrandController::class, 'update']);
+    Route::post('update/{brand}', [BrandController::class, 'update']);
     Route::delete('delete/{brand}', [BrandController::class, 'destroy']);
     Route::post('/{brand}/toggleStatus', [BrandController::class, 'toggleStatus']);
     // Route::post('/{brand}/togglestatus', [BrandController::class, 'togglestatus']);
