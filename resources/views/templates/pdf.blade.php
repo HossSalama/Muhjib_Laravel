@@ -24,7 +24,7 @@
 @foreach($template->startCoverImages as $cover)
     @if($cover->background_position !== 'products' && $cover->background_position !== 'client')
         <div class="page centered-content">
-            <img src="{{ image_url($cover->path) }}" style="max-width:100%; height:auto;">
+            <img src="{{ pdf_image_path($cover->path) }}" style="max-width:100%; height:auto;">
         </div>
     @endif
 @endforeach
@@ -44,11 +44,11 @@
     @if($brand)
         <div class="page centered-content">
             @if(!empty($brand->background_image_url))
-                <img src="{{ image_url($brand->background_image_url) }}" class="background-image">
+                <img src="{{ pdf_image_path($brand->background_image_url) }}" class="background-image">
             @endif
 
             @if($brand->logo)
-                <img src="{{ image_url($brand->logo) }}" class="logo-top-right">
+                <img src="{{ pdf_image_path($brand->logo) }}" class="logo-top-right">
             @endif
 
             <div class="content">
@@ -63,12 +63,12 @@
     @foreach($chunkedProducts as $chunk)
         <div class="page">
             @if($productsBg)
-                <img src="{{ image_url($productsBg->path) }}" class="background-image">
+                <img src="{{ pdf_image_path($productsBg->path) }}" class="background-image">
             @endif
 
             <div class="content">
                 @if($client && $client->logo)
-                    <img src="{{ image_url($client->logo) }}" class="logo-top-right">
+                    <img src="{{ pdf_image_path($client->logo) }}" class="logo-top-right">
                 @endif
 
                 <h2>{{ $brand->name ?? 'Other Products' }}</h2>
@@ -76,9 +76,9 @@
                     @foreach($chunk as $tp)
                         <div class="product">
                             @if($tp->image)
-                                <img src="{{ image_url($tp->image) }}" alt="{{ $tp->name }}">
+                                <img src="{{ pdf_image_path($tp->image) }}" alt="{{ $tp->name }}">
                             @else
-                                <img src="{{ asset('images/placeholder.jpg') }}" alt="No Image">
+                                <img src="{{ public_path('images/placeholder.jpg') }}" alt="No Image">
                             @endif
 
                             <p><strong>{{ $tp->name }}</strong></p>
@@ -104,10 +104,12 @@
 @php $clientBg = $template->coverImages->where('background_position', 'client')->first(); @endphp
 @if($includeClientInfo)
     <div class="page">
-        @if($clientBg) <img src="{{ image_url($clientBg->path) }}" class="background-image"> @endif
+        @if($clientBg)
+            <img src="{{ pdf_image_path($clientBg->path) }}" class="background-image">
+        @endif
         <div class="content centered-content">
             @if($client && $client->logo)
-                <img src="{{ image_url($client->logo) }}" class="logo-top-right">
+                <img src="{{ pdf_image_path($client->logo) }}" class="logo-top-right">
             @endif
 
             <h2>Client Information</h2>
@@ -164,7 +166,7 @@
 {{-- ✅ الغلافات النهاية --}}
 @foreach($template->endCoverImages as $cover)
     <div class="page centered-content">
-        <img src="{{ image_url($cover->path) }}" style="max-width:100%; height:auto;">
+        <img src="{{ pdf_image_path($cover->path) }}" style="max-width:100%; height:auto;">
     </div>
 @endforeach
 
