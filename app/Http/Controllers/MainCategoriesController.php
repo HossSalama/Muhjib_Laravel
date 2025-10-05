@@ -20,24 +20,35 @@ class MainCategoriesController extends Controller
     public function filter(){
     }
 
-    public function store(StoreMainCategoriesRequest $request)
-    {
-        $validated = $request->validate([
-        'brand_id' => 'required|exists:brands,id',
-        'name_en' => 'required|string|max:255',
-        'name_ar' => 'required|string|max:255',
-        'image_url' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        'color_code' => 'nullable|string|max:7',
+public function store(StoreMainCategoriesRequest $request)
+{
+    $validated = $request->validate([
+        'categories' => 'required|array|min:1',
+        'categories.*.brand_id' => 'required|exists:brands,id',
+        'categories.*.name_en' => 'required|string|max:255',
+        'categories.*.name_ar' => 'required|string|max:255',
+        'categories.*.image_url' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        'categories.*.color_code' => 'nullable|string|max:7',
     ]);
 
-    if ($request->hasFile('image_url')) {
-        $validated['image_url'] = $request->file('image_url')->store('main_categories', 'public');
+    $createdCategories = [];
+
+    foreach ($request->categories as $index => $catData) {
+        // التعامل مع الصور لو موجودة
+        if ($request->hasFile("categories.$index.image_url")) {
+            $catData['image_url'] = $request->file("categories.$index.image_url")->store('main_categories', 'public');
+        }
+
+        $category = MainCategories::create($catData);
+        $createdCategories[] = new MainCategoryResource($category);
     }
 
-        $category = MainCategories::create($validated);
-        $data = new MainCategoryResource($category);
-        return response()->json(['message'=>'Main Category Created Successfully', 'data'=>$data],201);
-    }
+    return response()->json([
+        'message' => 'Main Categories Created Successfully',
+        'data' => $createdCategories
+    ], 201);
+}
+
 
     public function show($id)
     {
