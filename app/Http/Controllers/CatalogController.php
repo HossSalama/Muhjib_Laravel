@@ -225,8 +225,9 @@ public function convertToCatalog(Request $request, Basket $basket)
     $pdf = Pdf::loadView('templates.pdf', [
         'template' => $template,
         'user' => $user,
-        'client' => $template->client,
-        'groupedProducts' => $groupedProducts
+        'client' => $basket->client,
+        'groupedProducts' => $groupedProducts,
+        'includeClientInfo' => true
     ])->setPaper('A4', 'portrait');
 
     $fileName = 'catalog_' . $catalog->id . '_' . time() . '.pdf';
